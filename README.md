@@ -5,7 +5,7 @@
 > gradle
 
 ## 2. System structure
-> spring discovery
-> spring gateway + openAPI(UI)
-> spring boot application #1 + swagger(UI)
-> spring boot application #2 + swagger(UI)
+> 1. spring discovery
+> 2. spring gateway + openAPI(UI)
+> 3. spring boot application #1 + swagger(UI)
+> 4. spring boot application #2 + swagger(UI)
