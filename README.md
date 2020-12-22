@@ -1,8 +1,8 @@
 # api-gateway
 
 ## 1. Deveplop Environment
-> spring boot
-> gradle
+> 1. spring boot
+> 2. gradle
 
 ## 2. System structure
 > 1. spring discovery
