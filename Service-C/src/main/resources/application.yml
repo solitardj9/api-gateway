@@ -1,0 +1,19 @@
+server:
+  port: 19370
+      
+spring:
+  application:
+    name: service-a
+  main:
+    allow-bean-definition-overriding: true
+#  cloud:
+#    config: 
+#      uri: http://127.0.0.1:19671
+      
+eureka:
+#  instance:
+#    instance-id: service-a:node-001
+  client:
+    enabled: true
+    serviceUrl:
+      defaultZone: ${EUREKA_URL:http://127.0.0.1:19270/eureka/}
