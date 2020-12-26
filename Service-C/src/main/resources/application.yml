@@ -11,8 +11,9 @@ spring:
 #      uri: http://127.0.0.1:19671
       
 eureka:
-#  instance:
-#    instance-id: service-a:node-001
+  instance:
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${spring.application.instance_id:${server.port}}
+#   instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${spring.application.instance_id:${server.port}}
   client:
     enabled: true
     serviceUrl:
