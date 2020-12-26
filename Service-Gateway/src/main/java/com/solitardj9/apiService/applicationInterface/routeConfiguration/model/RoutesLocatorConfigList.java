@@ -1,4 +1,4 @@
-package com.solitardj9.apiService.serviceInterface.filters.routeFilterModel;
+package com.solitardj9.apiService.applicationInterface.routeConfiguration.model;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OpenApiConfigList {
-	
-	private List<OpenApiConfig> configs;
+public class RoutesLocatorConfigList {
+
+	private List<RoutesLocatorConfig> configs;
 }

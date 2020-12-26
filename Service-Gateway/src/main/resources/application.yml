@@ -58,10 +58,9 @@ eureka:
     serviceUrl:
       defaultZone: ${EUREKA_URL:http://127.0.0.1:19270/eureka/}
       
-openapi:
-  config:
-    list: '{"configs" : [ { "serviceName" : "service-a", "path" : "/service-a/**", "routingUri" : "http://localhost:19370", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "path" : "/service-b/**", "routingUri" : "http://localhost:19371", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
-#    list: '{"configs" : [ { "serviceName" : "service-a", "path" : "/service-a/**", "routingUri" : "lb://service-a", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "path" : "/service-b/**", "routingUri" : "lb://service-b", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
+route:
+  config: '{"configs" : [ { "serviceName" : "service-a", "enable" : true, "path" : "/service-a/**", "routingUri" : "http://localhost:19370", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "enable" : true, "path" : "/service-b/**", "routingUri" : "http://localhost:19371", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
+#  config: '{"configs" : [ { "serviceName" : "service-a", "enable" : true, "path" : "/service-a/**", "routingUri" : "lb://service-a", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "enable" : true, "path" : "/service-b/**", "routingUri" : "lb://service-b", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
 
 
 
