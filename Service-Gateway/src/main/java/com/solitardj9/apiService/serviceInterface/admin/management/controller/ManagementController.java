@@ -55,4 +55,13 @@ public class ManagementController {
 
         return new ResponseEntity<>(routeManager.getRoutes(), HttpStatus.OK);
     }
+    
+    @SuppressWarnings("rawtypes")
+	@PutMapping(value="/broadcast")
+	public ResponseEntity onBroadcast(@RequestBody(required=false) String requestBody) {
+		//
+		logger.info("[ManagementController].onBroadcast is called.");
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

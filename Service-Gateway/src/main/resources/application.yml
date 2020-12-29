@@ -11,7 +11,7 @@ server:
 ## https://twofootdog.tistory.com/64
 spring:
   application:
-    name: service_gateway
+    name: gateway-service
   main:
     allow-bean-definition-overriding: true
 #  cloud:

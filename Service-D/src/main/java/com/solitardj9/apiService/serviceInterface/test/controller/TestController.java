@@ -27,4 +27,13 @@ public class TestController {
 		
 		return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "This is result of API Test on Service-B"), HttpStatus.OK);
     }
+	
+	@SuppressWarnings("rawtypes")
+	@PutMapping(value="/broadcast")
+	public ResponseEntity onPutBroadcast(@RequestBody(required=false) String requestBody) {
+		//
+		logger.info("[TestController].onPutBroadcast(/service-a/test/broadcast) is called.");
+		
+		return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "This is result of API Test on Service-A"), HttpStatus.OK);
+    }
 }
