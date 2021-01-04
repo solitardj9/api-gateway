@@ -1,5 +1,6 @@
 package ServiceWorker.model.seviceWorkerConfig;
 
+import java.util.List;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -19,7 +20,7 @@ public class Config {
 	
 	private String method;
 	
-	private Map<String, String> headers;
+	private Map<String, List<String>> headers;
 	
 	private Map<String, String> queryParams;
 	

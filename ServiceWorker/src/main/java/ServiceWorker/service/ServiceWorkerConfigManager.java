@@ -29,7 +29,7 @@ public class ServiceWorkerConfigManager {
 		serviceWorkerConfigs.remove(name);
 	}
 	
-	public String getConfig(String name) {
+	public String getConfigAsString(String name) {
 		//
 		ServiceWorkerConfigBase serviceWorkerConfigBase = serviceWorkerConfigs.get(name);
 		if (serviceWorkerConfigBase != null) {
@@ -42,7 +42,15 @@ public class ServiceWorkerConfigManager {
 		}
 		else
 			return null;
-		
+	}
+	
+	public ServiceWorkerConfigBase getConfig(String name) {
+		//
+		ServiceWorkerConfigBase serviceWorkerConfigBase = serviceWorkerConfigs.get(name);
+		if (serviceWorkerConfigBase != null)
+			return serviceWorkerConfigBase;
+		else
+			return null;
 	}
 	
 	public String getAllConfigs() {

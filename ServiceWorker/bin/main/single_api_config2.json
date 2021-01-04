@@ -7,19 +7,19 @@
 	"path" : "service/forecastDailyNext",
 	"method" : "get",
     "headers" : {
-      "key_FD_1" : "[FUNCTION(API-WEATHER-FORECAST_DAILY, headers, key_FD_1)]",
-      "key_FD_2" : "[FUNCTION(API-WEATHER-FORECAST_DAILY, headers, key_FD_2)]"
+      "key_FD_1" : ["FUNCTION(API-WEATHER-FORECAST_DAILY, headers, key_FD_1)"],
+      "key_FD_2" : ["FUNCTION(API-WEATHER-FORECAST_DAILY, headers, key_FD_2)"]
     },
     "queryParams" : {
-      "key_FD_1" : "[FUNCTION(API-WEATHER-FORECAST_DAILY, queryParams, key_FD_1)]",
-      "key_FD_2" : "[FUNCTION(API-WEATHER-FORECAST_DAILY, queryParams, key_FD_2)]"
+      "key_FD_1" : "FUNCTION(API-WEATHER-FORECAST_DAILY, queryParams, key_FD_1)",
+      "key_FD_2" : "FUNCTION(API-WEATHER-FORECAST_DAILY, queryParams, key_FD_2)"
     },
     "body" : {
-      "code" : "[FUNCTION( , body, $.code)]",
-      "message" : "[FUNCTION( , body, $.message)]",
+      "code" : "FUNCTION( , body, $.code)",
+      "message" : "FUNCTION( , body, $.message)",
       "ret" : {
-        "retKey1" : "[FUNCTION(API-WEATHER-FORECAST_DAILY, body, $.ret.retKey1)]",
-        "retKey2" : "[FUNCTION(API-WEATHER-FORECAST_DAILY, body, $.ret.retKey2)]"
+        "retKey1" : "FUNCTION(API-WEATHER-FORECAST_DAILY, body, $.ret.retKey1)",
+        "retKey2" : "FUNCTION(API-WEATHER-FORECAST_DAILY, body, $.ret.retKey2)"
       }
     }
   }
