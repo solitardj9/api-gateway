@@ -1,0 +1,26 @@
+{
+  "name" : "API-WEATHER-FORECAST_DAILY",
+  "type" : "single",
+  "config" : {
+    "scheme" : "https",
+	"host" : "www.accumWeather.com" ,
+	"path" : "service/forecastDaily",
+	"method" : "get",
+    "headers" : {
+      "key_FD_1" : "[FUNCTION( , headers, key_INPUT_1)]",
+      "key_FD_2" : "[FUNCTION( , headers, key_INPUT_2)]"
+    },
+    "queryParams" : {
+      "key_FD_1" : "[FUNCTION( , queryParams, key_INPUT_1)]",
+      "key_FD_2" : "[FUNCTION( , queryParams, key_INPUT_2)]"
+    },
+    "body" : {
+      "code" : "[FUNCTION( , body, $.code)]",
+      "message" : "[FUNCTION( , body, $.message)]",
+      "ret" : {
+        "retKey1" : "[FUNCTION( , body, $.ret.retKey1)]",
+        "retKey2" : "[FUNCTION( , body, $.ret.retKey2)]"
+      }
+    }
+  }
+}

@@ -1,16 +1,12 @@
-package com.solitardj9.apiService.systemInterface.httpInterface.service.impl;
+package ServiceWorker.model.seviceWorker;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.util.UriComponentsBuilder;
 
 public class UrlHostUtil {
 	//
-	private static final Logger logger = LoggerFactory.getLogger(UrlHostUtil.class);
-	
 	public static UriComponentsBuilder makeUriComponentsBuilder(String shceme, String url, String path) {
 		//
 		String host = getHost(url); 
@@ -72,7 +68,7 @@ public class UrlHostUtil {
 			tmpUrl = new URL(url);
 		}
 		catch (MalformedURLException e) {
-			logger.error("[UrlHostUtil].getHost : error = " + e.toString());
+			e.printStackTrace();
 			return null;
 		}
 		
@@ -88,7 +84,7 @@ public class UrlHostUtil {
 			tmpUrl = new URL(url);
 		}
 		catch (MalformedURLException e) {
-			logger.error("[UrlHostUtil].getPort : error = " + e.toString());			
+			e.printStackTrace();			
 			return null;
 		}
 		

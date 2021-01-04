@@ -1,0 +1,8 @@
+{
+  "name" : "API-WEATHER-FORECAST_DAILY_HOURLY",
+  "type" : "composite",
+  "sequence" : [
+    "API-WEATHER-FORECAST_DAILY",
+    "API-WEATHER-FORECAST_DAILY_NEXT"
+  ]
+}

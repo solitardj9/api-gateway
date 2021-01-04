@@ -1,4 +1,4 @@
-package com.solitardj9.apiService.systemInterface.httpInterface.service.impl;
+package ServiceWorker.model.seviceWorker;
 
 import java.net.URI;
 import java.security.KeyManagementException;
@@ -6,7 +6,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
@@ -21,34 +20,22 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.BasicHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContexts;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.solitardj9.apiService.systemInterface.httpInterface.service.HttpProxyAdaptor;
-
-@Service("httpProxyAdaptor")
-public class HttpProxyAdaptorImpl implements HttpProxyAdaptor {
+public class HttpProxyAdaptor {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HttpProxyAdaptorImpl.class);
-	
-	@Autowired
 	RestTemplate restTemplate;
 	
-	@Bean()
-	public RestTemplate restTemplate() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
+	public HttpProxyAdaptor() throws KeyStoreException, NoSuchAlgorithmException, KeyManagementException {
 		//
 		try {
 			TrustStrategy acceptingTrustStrategy = (cert, authType) -> true;
@@ -73,16 +60,13 @@ public class HttpProxyAdaptorImpl implements HttpProxyAdaptor {
 			requestFactory.setConnectTimeout(10000);
 			requestFactory.setReadTimeout(300000);
 			
-			return new RestTemplate(requestFactory);
+			restTemplate = new RestTemplate(requestFactory);
 		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
-			logger.error("[HttpProxyAdaptor].restTemplate : error = " + e.toString());
+			e.printStackTrace();
 		}
-
-		return new RestTemplate();
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	@Override
 	public ResponseEntity<String> executeHttpProxy(String scheme, String url, String path, Map<String, Object> queryParams, HttpMethod method, HttpHeaders headers, String body) {
 		//
 		if (url != null) {
