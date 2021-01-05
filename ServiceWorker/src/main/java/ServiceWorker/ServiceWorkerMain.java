@@ -1,8 +1,7 @@
 package ServiceWorker;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +14,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ServiceWorker.model.seviceWorker.FunctionExp;
 import ServiceWorker.model.seviceWorker.JsonUtil;
 import ServiceWorker.model.seviceWorker.ServiceWorkerSingle;
-import ServiceWorker.model.seviceWorkerConfig.ServiceWorkerConfigSingle;
 import ServiceWorker.service.ServiceWorkerConfigManager;
 
 public class ServiceWorkerMain {
@@ -44,10 +42,10 @@ public class ServiceWorkerMain {
 				"  \"name\" : \"API-WEATHER-FORECAST_DAILY\",\r\n" + 
 				"  \"type\" : \"single\",\r\n" + 
 				"  \"config\" : {\r\n" + 
-				"    \"scheme\" : \"https\",\r\n" + 
-				"	\"host\" : \"www.accumWeather.com\" ,\r\n" + 
-				"	\"path\" : \"service/forecastDaily\",\r\n" + 
-				"	\"method\" : \"get\",\r\n" + 
+				"    \"scheme\" : \"http\",\r\n" + 
+				"	\"host\" : \"127.0.0.1:19370\" ,\r\n" + 
+				"	\"path\" : \"service-a/test/getList\",\r\n" + 
+				"	\"method\" : \"PUT\",\r\n" + 
 				"    \"headers\" : {\r\n" + 
 				"      \"key_FD_1\" : [\"FUNCTION( , headers, key_INPUT_1)\"],\r\n" + 
 				"      \"key_FD_2\" : [\"FUNCTION( , headers, key_INPUT_2)\"]\r\n" + 
@@ -56,14 +54,18 @@ public class ServiceWorkerMain {
 				"      \"key_FD_1\" : \"FUNCTION( , queryParams, key_INPUT_1)\",\r\n" + 
 				"      \"key_FD_2\" : \"FUNCTION( , queryParams, key_INPUT_2)\"\r\n" + 
 				"    },\r\n" + 
-				"    \"body\" : {\r\n" + 
-				"      \"code\" : \"FUNCTION( , body, $.code)\",\r\n" + 
-				"      \"message\" : \"FUNCTION( , body, $.message)\",\r\n" + 
-				"      \"ret\" : {\r\n" + 
-				"        \"retKey1\" : \"FUNCTION( , body, $.ret.retKey1)\",\r\n" + 
-				"        \"retKey2\" : \"FUNCTION( , body, $.ret.retKey2)\"\r\n" + 
-				"      }\r\n" + 
-				"    }\r\n" + 
+				"	 \"requestBody\" : {\r\n" +
+				"	   \"id\" : \"FUNCTION( , requestBody, $.id)\",\r\n" + 
+				"      \"age\" : \"FUNCTION( , requestBody, $.age)\"\r\n" + 
+				"	 },\r\n" +
+				"    \"responseBody\" : {\r\n" +
+				"      \"code\" : \"FUNCTION( , responseBody, $.code)\",\r\n" +
+				"      \"message\" : \"FUNCTION( , responseBody, $.message)\",\r\n" +
+				"      \"ret\" : {\r\n" +
+				"        \"retKey1\" : \"FUNCTION( , responseBody, $.ret.retKey1)\",\r\n" +
+				"        \"retKey2\" : \"FUNCTION( , responseBody, $.ret.retKey2)\"\r\n" +
+				"      }\r\n" +
+				"    }" + 
 				"  }\r\n" + 
 				"}";
 		String config_composite = "{\r\n" + 
@@ -86,7 +88,7 @@ public class ServiceWorkerMain {
 		
 		System.out.println(serviceWorkerConfigManager.getAllConfigs());
 		
-		Object body = JsonUtil.readValue(config_single, "$.config.body");
+		Object body = JsonUtil.readValue(config_single, "$.config.responseBody");
 		System.out.println(body);
 		Object code = JsonUtil.readValue(body, "$.code");
 		System.out.println(code);
@@ -108,11 +110,26 @@ public class ServiceWorkerMain {
 		System.out.println("inputHttpHeaders = " + inputHttpHeaders);
 		serviceWorkerSingle.setInputHttpHeaders(inputHttpHeaders);
 		
+		Map<String, Object> inputQueryParams = new HashMap<>();
+		inputQueryParams.put("key_INPUT_1", "deviceId_test");
+		inputQueryParams.put("key_INPUT_2", 35.5);
+		System.out.println("inputHttpHeaders = " + inputHttpHeaders);
+		serviceWorkerSingle.setInputQueryParams(inputQueryParams);
+		
+		MyListRequest myListRequest = new MyListRequest("bk.cha", 21);
+		try {
+			serviceWorkerSingle.setInputRequestBody(om.writeValueAsString(myListRequest));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
 		serviceWorkerSingle.doWork();
-		
-		System.out.println("OutputHttpHeaders = " + serviceWorkerSingle.getOutputHttpHeaders());
-		
-		
+		System.out.println("//---------------------------------------------");
+		System.out.println("OutputHttpHeaders = " + serviceWorkerSingle.getOutgoingHttpHeaders());
+		System.out.println("OutputQueryParams = " + serviceWorkerSingle.getOutgoingQueryParams());
+		System.out.println("OutgoingRequestBody = " + serviceWorkerSingle.getOutgoingRequestBody());
+		System.out.println("InputResponseBody = " + serviceWorkerSingle.getInputResponseBody());
+		System.out.println("//---------------------------------------------");
 	}
 	
 	private static Object executeFunction(String str) {

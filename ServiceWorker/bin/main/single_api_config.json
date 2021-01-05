@@ -14,12 +14,16 @@
       "key_FD_1" : "FUNCTION( , queryParams, key_INPUT_1)",
       "key_FD_2" : "FUNCTION( , queryParams, key_INPUT_2)"
     },
-    "body" : {
-      "code" : "FUNCTION( , body, $.code)",
-      "message" : "FUNCTION( , body, $.message)",
+	"requestBody" : {
+	  "id" : "FUNCTION( , requestBody, $.id)",
+      "age" : "FUNCTION( , requestBody, $.age)"
+	},
+    "responseBody" : {
+      "code" : "FUNCTION( , responseBody, $.code)",
+      "message" : "FUNCTION( , responseBody, $.message)",
       "ret" : {
-        "retKey1" : "FUNCTION( , body, $.ret.retKey1)",
-        "retKey2" : "FUNCTION( , body, $.ret.retKey2)"
+        "retKey1" : "FUNCTION( , responseBody, $.ret.retKey1)",
+        "retKey2" : "FUNCTION( , responseBody, $.ret.retKey2)"
       }
     }
   }

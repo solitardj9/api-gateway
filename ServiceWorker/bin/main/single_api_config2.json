@@ -14,12 +14,16 @@
       "key_FD_1" : "FUNCTION(API-WEATHER-FORECAST_DAILY, queryParams, key_FD_1)",
       "key_FD_2" : "FUNCTION(API-WEATHER-FORECAST_DAILY, queryParams, key_FD_2)"
     },
-    "body" : {
-      "code" : "FUNCTION( , body, $.code)",
-      "message" : "FUNCTION( , body, $.message)",
+	"requestBody" : {
+	  "id" : "FUNCTION(API-WEATHER-FORECAST_DAILY , requestBody, $.id)",
+      "age" : "FUNCTION(API-WEATHER-FORECAST_DAILY , requestBody, $.age)"
+	},
+    "responseBody" : {
+      "code" : "FUNCTION( , responseBody, $.code)",
+      "message" : "FUNCTION( , responseBody, $.message)",
       "ret" : {
-        "retKey1" : "FUNCTION(API-WEATHER-FORECAST_DAILY, body, $.ret.retKey1)",
-        "retKey2" : "FUNCTION(API-WEATHER-FORECAST_DAILY, body, $.ret.retKey2)"
+        "retKey1" : "FUNCTION(API-WEATHER-FORECAST_DAILY, responseBody, $.ret.retKey1)",
+        "retKey2" : "FUNCTION(API-WEATHER-FORECAST_DAILY, responseBody, $.ret.retKey2)"
       }
     }
   }

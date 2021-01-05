@@ -3,6 +3,8 @@ package ServiceWorker.model.seviceWorker;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,6 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,13 +35,19 @@ public class ServiceWorkerSingle {
 	
 	private HttpHeaders inputHttpHeaders;
 	
-	private HttpHeaders outputHttpHeaders;
+	private HttpHeaders outgoingHttpHeaders;
 	
 	private Map<String, Object> inputQueryParams;
 	
-	private Map<String, Object> outputQueryParams;
+	private Map<String, Object> outgoingQueryParams;
 	
-	private Object outputBody;
+	private String inputRequestBody;
+	
+	private String outgoingRequestBody;
+	
+	private String inputResponseBody;
+	
+	private String outgoingResponseBody;
 	
 	private ObjectMapper om = new ObjectMapper();
 	
@@ -51,62 +61,103 @@ public class ServiceWorkerSingle {
 		}
 	}
 	
-	public void setInputs(HttpHeaders inputHttpHeaders, Map<String, Object> inputQueryParams) {
+	public void setInputs(HttpHeaders inputHttpHeaders, Map<String, Object> inputQueryParams, String inputRequestBody) {
 		//
 		this.inputHttpHeaders = inputHttpHeaders;
 		this.inputQueryParams = inputQueryParams;
+		this.inputRequestBody = inputRequestBody;
 	}
 	
 	public void doWork() {
 		// TODO :
 		// 1)
-		makeOutputHeaders();
+		makeOutgoingHeaders();
 		
 		// 2)
-		makeOutputQueryParams();
+		makeOutgoingQueryParams();
 		
 		// 3)
+		makeOutgoingRequestBody();
+		
+		// 4)
 		executeHttpProxy();
 		
-		// 4) 
-		makeOutputBody();
+		// 5) 
+		makeOutgoingResponseBody();
 	}
 	
-	private void makeOutputHeaders() {
+	private void makeOutgoingHeaders() {
 		//
-		if (outputHttpHeaders == null)
-			outputHttpHeaders = new HttpHeaders();
+		if (outgoingHttpHeaders == null)
+			outgoingHttpHeaders = new HttpHeaders();
 			
-		Map<String, List<String>> headers = this.config.getConfig().getHeaders();
-		for (Entry<String, List<String>> iterHeaders : headers.entrySet()) {
+		Map<String, List<String>> headersConfig = this.config.getConfig().getHeaders();
+		for (Entry<String, List<String>> iterHeaders : headersConfig.entrySet()) {
 			List<String> headerValues = iterHeaders.getValue();
 			for (String iterHeaderValue : headerValues) {
-				outputHttpHeaders.add(iterHeaders.getKey(), (String)executeFunction(iterHeaderValue));
+				outgoingHttpHeaders.add(iterHeaders.getKey(), (String)executeFunction(iterHeaderValue));
 			}
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	private void makeOutputQueryParams() {
-		// TODO :
+	private void makeOutgoingQueryParams() {
+		//
+		if (outgoingQueryParams == null)
+			outgoingQueryParams = new HashMap<>();
+		
+		Map<String, String> queryParamsConfig = this.config.getConfig().getQueryParams();
+		for (Entry<String, String> iterQueryParams : queryParamsConfig.entrySet()) {
+			outgoingQueryParams.put(iterQueryParams.getKey(), executeFunction(iterQueryParams.getValue()));
+		}
 	}
 	
-	private void executeHttpProxy() {
-		// TODO :
+	private void makeOutgoingRequestBody() {
+		// TODO : 
+		Object requestBodyConfig = this.config.getConfig().getRequestBody();
+		List<JsonKeyPathObject> jsonPathKeyObjects = new ArrayList<>();
+		JsonUtil.extractJsonKeyPathObjectFormJsonObject(requestBodyConfig, jsonPathKeyObjects);
+		
+		System.out.println("b/f jsonPathKeyObjects = " + jsonPathKeyObjects.toString());
+		
+		for (JsonKeyPathObject iter : jsonPathKeyObjects) {
+			if (iter.getObject() instanceof String) {
+				String exp = (String)iter.getObject();
+				if (exp.contains("FUNCTION")) {
+					iter.setObject(executeFunction(exp));
+				}
+			}
+		}
+		
+		System.out.println("a/f jsonPathKeyObjects = " + jsonPathKeyObjects.toString());
+
+		outgoingRequestBody = JsonUtil.mergeJsonString(jsonPathKeyObjects);
+		
+		System.out.println("outgoingRequetBody = " + outgoingRequestBody);
+	}
+	
+	private ResponseEntity<String> executeHttpProxy() {
+		//
 		String scheme = config.getConfig().getScheme();
-		//httpProxyAdaptor.executeHttpProxy(scheme, url, path, queryParams, method, headers, body)
+		String url = config.getConfig().getHost();
+		String path = config.getConfig().getPath();
+		HttpMethod httpMethod = HttpMethod.valueOf(config.getConfig().getMethod());
+		
+		ResponseEntity<String> result = httpProxyAdaptor.executeHttpProxy(scheme, 
+																		  url, 
+																		  path, 
+																		  outgoingQueryParams, 
+																		  httpMethod, 
+																		  outgoingHttpHeaders, 
+																		  outgoingRequestBody);
+		
+		inputResponseBody = result.getBody();
+		
+		//System.out.println("inputResponseBody = " + inputResponseBody);
+		
+		return result;
 	}
 	
-	private void makeOutputBody() {
+	private void makeOutgoingResponseBody() {
 		// TODO :
 	}
 	
@@ -165,8 +216,11 @@ public class ServiceWorkerSingle {
 			if (functionExp.getResource().equals("headers")) {
 				return getValueOfInputHttpHeader(functionExp.getKey());
 			}
-			else if (functionExp.getResource().equals("body")) {
-				return getValueOfBodyFromReponse(functionExp.getKey());
+			else if (functionExp.getResource().equals("queryParams")) {
+				return getValueOfInputQueryParams(functionExp.getKey());
+			}
+			else if (functionExp.getResource().equals("requestBody")) {
+				return getValueOfRequestBody(functionExp.getKey());
 			}
 			else {
 				return null;
@@ -176,8 +230,11 @@ public class ServiceWorkerSingle {
 			if (functionExp.getResource().equals("headers")) {
 				return getValueOfInputHttpHeaderFromOhterApi(functionExp.getApi(), functionExp.getKey());
 			}
-			else if (functionExp.getResource().equals("body")) {
-				return getValueOfBodyFromOhterApi(functionExp.getApi(), functionExp.getKey());
+			else if (functionExp.getResource().equals("queryParams")) {
+				return getValueOfInputQueryParamsFromOhterApi(functionExp.getApi(), functionExp.getKey());
+			}
+			else if (functionExp.getResource().equals("requestBody")) {
+				return getValueOfRequestBodyFromOhterApi(functionExp.getApi(), functionExp.getKey());
 			}
 			else {
 				return null;
@@ -197,20 +254,27 @@ public class ServiceWorkerSingle {
 		return serviceWorkerComposite.getValueOfInputHttpHeaderFromOhterApi(api, key);
 	}
 	
-	
-	
-	
-	
-	
-	// Body ---------------------------------
-	private Object getValueOfBodyFromReponse(String keyPath) {
-		// read value of specific key path in outputBody
-		return JsonUtil.readValue(outputBody, keyPath);
+	// Query Parameters ---------------------
+	private Object getValueOfInputQueryParams(String key) {
+		// read value of specific key path in inputHttpHeader
+		return this.inputQueryParams.get(key);
 	}
 	
-	private Object getValueOfBodyFromOhterApi(String api, String keyPath) {
+	private Object getValueOfInputQueryParamsFromOhterApi(String api, String key) {
 		//
-		return serviceWorkerComposite.getValueOfBodyFromOhterApi(api, keyPath);
+		return serviceWorkerComposite.getValueOfInputQueryParamsFromOhterApi(api, key);
+	}
+	
+	// Body ---------------------------------
+	private Object getValueOfRequestBody(String keyPath) {
+		// TODO : 
+		// read value of specific key path in inputRequestBody
+		return JsonUtil.readValue(inputRequestBody, keyPath);
+	}
+	
+	private Object getValueOfRequestBodyFromOhterApi(String api, String keyPath) {
+		// TODO : 
+		return serviceWorkerComposite.getValueOfRequestBodyFromOhterApi(api, keyPath);
 	}
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -220,9 +284,14 @@ public class ServiceWorkerSingle {
 		return getValueOfInputHttpHeader(key);
 	}
 	
-	public Object getValueOfBody(String keyPath) {
+	public Object getValueOfQueryParam(String key) {
 		//
-		return getValueOfBodyFromReponse(keyPath);
+		return getValueOfInputQueryParams(key);
+	}
+	
+	public Object getValueOfBody(String keyPath) {
+		// TODO : 
+		return getValueOfRequestBody(keyPath);
 	}
 	//-------------------------------------------------------------------------------------------------------------------
 }

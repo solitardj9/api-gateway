@@ -60,6 +60,35 @@ public class JsonUtil {
 		return dc.jsonString();
     }
 	
+	public static String mergeJsonString(List<JsonKeyPathObject> jsonPathKeyObjects) {
+        //
+		DocumentContext dc = JsonPath.parse("{}");
+		
+		for (JsonKeyPathObject iter : jsonPathKeyObjects) {
+			if (isExistKeyPath(dc, iter.getKeyPath())) {	// update
+				updateJsonDocument(dc, iter.getKeyPath(), iter.getObject());
+			}
+			else { // insert
+				insertJsonDocument(dc, iter.getPathList(), iter.getKey(), iter.getObject());
+			}
+		}
+		
+		return dc.jsonString();
+    }
+	
+	public static void extractJsonKeyPathObjectFormJsonObject(Object jsonObject, List<JsonKeyPathObject> jsonPathKeyObjects) {
+		//
+		if (jsonObject == null)
+			return;
+		
+		try {
+			getJsonPathKeyObject(null, om.readValue(om.writeValueAsString(jsonObject), Map.class), jsonPathKeyObjects);
+		} catch (IOException e) {
+			//e.printStackTrace();
+			logger.error("[JsonUtil].extractJsonKeyPathObjectFormJsonObject : error = " + e.getStackTrace());
+		}
+	}
+	
 	@SuppressWarnings({ "unchecked" })
 	private static void extractJsonKeyPathObjectFormJsonString(String jsonString, List<JsonKeyPathObject> jsonPathKeyObjects) {
 		//

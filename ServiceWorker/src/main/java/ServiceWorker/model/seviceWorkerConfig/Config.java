@@ -24,5 +24,7 @@ public class Config {
 	
 	private Map<String, String> queryParams;
 	
-	private Object body;
+	private Object requestBody;
+	
+	private Object responseBody;
 }

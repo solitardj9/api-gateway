@@ -17,7 +17,12 @@ public class ServiceWorkerComposite {
 		return serviceWorkers.get(serviceWorkerName).getValueOfHeader(key);
 	}
 	
-	public Object getValueOfBodyFromOhterApi(String serviceWorkerName, String keyPath) {
+	public Object getValueOfInputQueryParamsFromOhterApi(String serviceWorkerName, String key) {
+		//
+		return serviceWorkers.get(serviceWorkerName).getValueOfQueryParam(key);
+	}
+	
+	public Object getValueOfRequestBodyFromOhterApi(String serviceWorkerName, String keyPath) {
 		//
 		return serviceWorkers.get(serviceWorkerName).getValueOfBody(keyPath);
 	}
