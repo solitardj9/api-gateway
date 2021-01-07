@@ -1,4 +1,4 @@
-package ServiceWorker.model.seviceWorker;
+package ServiceWorker.service.seviceWorker;
 
 import java.util.ArrayList;
 import java.util.List;

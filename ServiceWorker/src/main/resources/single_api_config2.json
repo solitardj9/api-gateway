@@ -5,7 +5,7 @@
     "scheme" : "https",
 	"host" : "www.accumWeather.com" ,
 	"path" : "service/forecastDailyNext",
-	"method" : "get",
+	"method" : "GET",
     "headers" : {
       "key_FD_1" : ["FUNCTION(API-WEATHER-FORECAST_DAILY, headers, key_FD_1)"],
       "key_FD_2" : ["FUNCTION(API-WEATHER-FORECAST_DAILY, headers, key_FD_2)"]

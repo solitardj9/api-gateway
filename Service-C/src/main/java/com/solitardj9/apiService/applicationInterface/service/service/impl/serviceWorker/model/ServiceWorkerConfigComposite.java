@@ -1,8 +1,9 @@
-package ServiceWorker.model.seviceWorkerConfig;
+package com.solitardj9.apiService.applicationInterface.service.service.impl.serviceWorker.model;
+
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import ServiceWorker.model.seviceWorkerConfig.config.Config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper=false)
-@JsonTypeName("single")
-public class ServiceWorkerConfigSingle extends ServiceWorkerConfigBase {
+@JsonTypeName("composite")
+public class ServiceWorkerConfigComposite extends ServiceWorkerConfigBase {
 	//
-	private Config config;
+	private List<String> sequence;
 }

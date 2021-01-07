@@ -1,8 +1,8 @@
-package ServiceWorker.model.seviceWorkerConfig;
+package com.solitardj9.apiService.applicationInterface.service.service.impl.serviceWorker.model;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.solitardj9.apiService.applicationInterface.service.service.impl.serviceWorker.model.config.Config;
 
-import ServiceWorker.model.seviceWorkerConfig.config.Config;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

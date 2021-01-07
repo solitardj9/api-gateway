@@ -1,4 +1,4 @@
-package ServiceWorker.model.seviceWorker;
+package ServiceWorker.service.seviceWorker;
 
 import java.util.Map;
 
@@ -14,18 +14,21 @@ public class ServiceWorkerComposite {
 	
 	public String getValueOfInputHttpHeaderFromOhterApi(String serviceWorkerName, String key) {
 		//
-		return serviceWorkers.get(serviceWorkerName).getValueOfHeader(key);
+		return serviceWorkers.get(serviceWorkerName).getValueOfHeaderByComposite(key);
 	}
 	
 	public Object getValueOfInputQueryParamsFromOhterApi(String serviceWorkerName, String key) {
 		//
-		return serviceWorkers.get(serviceWorkerName).getValueOfQueryParam(key);
+		return serviceWorkers.get(serviceWorkerName).getValueOfQueryParamByComposite(key);
 	}
 	
 	public Object getValueOfRequestBodyFromOhterApi(String serviceWorkerName, String keyPath) {
 		//
-		return serviceWorkers.get(serviceWorkerName).getValueOfBody(keyPath);
+		return serviceWorkers.get(serviceWorkerName).getValueOfRequestBodyByComposite(keyPath);
 	}
 	
-	
+	public Object getValueOfResponseBodyFromOhterApi(String serviceWorkerName, String keyPath) {
+		//
+		return serviceWorkers.get(serviceWorkerName).getValueOfResponseBodyByComposite(keyPath);
+	}
 }

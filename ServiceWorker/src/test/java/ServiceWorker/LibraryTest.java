@@ -4,6 +4,9 @@
 package ServiceWorker;
 
 import org.junit.Test;
+
+import ServiceWorker.Library;
+
 import static org.junit.Assert.*;
 
 public class LibraryTest {

@@ -1,12 +1,11 @@
-package ServiceWorker.service;
+package com.solitardj9.apiService.applicationInterface.service.service.impl.serviceWorker;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import ServiceWorker.model.seviceWorkerConfig.ServiceWorkerConfigBase;
+import com.solitardj9.apiService.applicationInterface.service.service.impl.serviceWorker.model.ServiceWorkerConfigBase;
 
 public class ServiceWorkerConfigManager {
 	

@@ -1,4 +1,4 @@
-package ServiceWorker.model.seviceWorker;
+package ServiceWorker.service.seviceWorker.functions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

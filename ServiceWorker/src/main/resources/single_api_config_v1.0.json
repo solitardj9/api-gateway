@@ -5,7 +5,7 @@
     "scheme" : "https",
 	"host" : "www.accumWeather.com" ,
 	"path" : "service/forecastDaily",
-	"method" : "get",
+	"method" : "GET",
     "headers" : {
       "key_FD_1" : ["FUNCTION( , headers, key_INPUT_1)"],
       "key_FD_2" : ["FUNCTION( , headers, key_INPUT_2)"]

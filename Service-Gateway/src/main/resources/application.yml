@@ -59,8 +59,9 @@ eureka:
       defaultZone: ${EUREKA_URL:http://127.0.0.1:19270/eureka/}
       
 route:
-  config: '{"configs" : [ { "serviceName" : "service-a", "enable" : true, "path" : "/service-a/**", "routingUri" : "http://localhost:19370", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "enable" : true, "path" : "/service-b/**", "routingUri" : "http://localhost:19371", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
-#  config: '{"configs" : [ { "serviceName" : "service-a", "enable" : true, "path" : "/service-a/**", "routingUri" : "lb://service-a", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "enable" : true, "path" : "/service-b/**", "routingUri" : "lb://service-b", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
+  config: '{"configs" : [ { "serviceName" : "service-a", "enable" : true, "path" : "/service/service-a/b2b/*/api/**", "routingUri" : "http://localhost:19370", "openApiPath" : "/v3/api-docs/service/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "enable" : true, "path" : "service/service-b/*/b2b/*/api/**", "routingUri" : "http://localhost:19371", "openApiPath" : "/v3/api-docs/service/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
+  #config: '{"configs" : [ { "serviceName" : "service-a", "enable" : true, "path" : "/service-a/**", "routingUri" : "http://localhost:19370", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "enable" : true, "path" : "/service-b/**", "routingUri" : "http://localhost:19371", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
+  #config: '{"configs" : [ { "serviceName" : "service-a", "enable" : true, "path" : "/service-a/**", "routingUri" : "lb://service-a", "openApiPath" : "/v3/api-docs/service-a", "swaggerPath" : "/v2/api-docs" }, { "serviceName" : "service-b", "enable" : true, "path" : "/service-b/**", "routingUri" : "lb://service-b", "openApiPath" : "/v3/api-docs/service-b", "swaggerPath" : "/v2/api-docs" } ] }'
 
 
 

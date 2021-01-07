@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,7 @@ import com.solitardj9.apiService.serviceInterface.test.model.list.MyListResopons
 import com.solitardj9.apiService.serviceInterface.test.model.list.MyResoponse;
 
 @RestController
-@RequestMapping(value="/service-a/test")
+@RequestMapping(value="/service/service-a/b2b/test/api")
 @CrossOrigin(origins = "*")
 public class TestController {
 	

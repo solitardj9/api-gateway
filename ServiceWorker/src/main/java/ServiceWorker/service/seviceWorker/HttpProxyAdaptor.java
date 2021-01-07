@@ -1,4 +1,4 @@
-package ServiceWorker.model.seviceWorker;
+package ServiceWorker.service.seviceWorker;
 
 import java.net.URI;
 import java.security.KeyManagementException;

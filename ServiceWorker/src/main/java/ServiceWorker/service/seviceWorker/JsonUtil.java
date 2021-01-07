@@ -1,4 +1,4 @@
-package ServiceWorker.model.seviceWorker;
+package ServiceWorker.service.seviceWorker;
 
 import java.io.IOException;
 import java.util.ArrayList;

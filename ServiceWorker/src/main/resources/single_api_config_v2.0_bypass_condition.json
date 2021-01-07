@@ -1,0 +1,43 @@
+{
+	"name" : "API-WEATHER-FORECAST_DAILY",
+	"type" : "single",
+	"config" : {
+		"scheme" : "http",
+		"host" : "127.0.0.1:19370" ,
+		"path" : "service-a/test/getList",
+		"method" : "PUT",
+		"requestRule" : [
+			{
+				"condition" : [],
+				"action" : {
+					"headers" : {
+    				},
+    				"queryParams" : {
+    				},
+					"requestBody" : {
+					}
+				}
+			}
+		],
+		"responseRule" : [
+			{
+				"condition" : ["TRIGGER(responseStatus, code, 404)"],
+				"responseBody" : {
+					"code" : 404,
+					"message" : "error_message_404"
+				}
+			},
+			{
+				"condition" : ["TRIGGER(responseStatus, code, 200)", "TRIGGER(responseBody, $.message, success)"],
+				"responseBody" : {
+					"code" : "FUNCTION( , responseBody, $.code)",
+					"message" : "FUNCTION( , responseBody, $.message)",
+					"ret" : {
+						"retKey1" : "FUNCTION( , responseBody, $.ret.retKey1)",
+						"retKey2" : "FUNCTION( , responseBody, $.ret.retKey2)"
+					}
+				}
+			}
+		]
+	}
+}

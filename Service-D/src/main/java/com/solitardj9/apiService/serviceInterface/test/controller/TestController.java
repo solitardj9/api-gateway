@@ -13,19 +13,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.solitardj9.apiService.serviceInterface.test.model.common.Response;
 
 @RestController
-@RequestMapping(value="/service-b/test")
+@RequestMapping(value="/service/service-a/b2b/test/api")
 @CrossOrigin(origins = "*")
 public class TestController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TestController.class);
-
+	
 	@SuppressWarnings("rawtypes")
 	@PutMapping(value="/check")
 	public ResponseEntity onPutCheck(@RequestBody(required=false) String requestBody) {
 		//
-		logger.info("[TestController].onPutCheck(/service-b/test/check) is called.");
+		logger.info("[TestController].onPutCheck(/service-a/test/check) is called.");
 		
-		return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "This is result of API Test on Service-B"), HttpStatus.OK);
+		return new ResponseEntity<>(new Response(HttpStatus.OK.value(), "This is result of API Test on Service-A"), HttpStatus.OK);
     }
 	
 	@SuppressWarnings("rawtypes")
