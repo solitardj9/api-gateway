@@ -31,4 +31,9 @@ public class ServiceWorkerComposite {
 		//
 		return serviceWorkers.get(serviceWorkerName).getValueOfResponseBodyByComposite(keyPath);
 	}
+	
+	public Object getValueOfResponseStatusFromOhterApi(String serviceWorkerName, String key) {
+		//
+		return serviceWorkers.get(serviceWorkerName).getValueOfResponseStatusByComposite(key);
+	}
 }

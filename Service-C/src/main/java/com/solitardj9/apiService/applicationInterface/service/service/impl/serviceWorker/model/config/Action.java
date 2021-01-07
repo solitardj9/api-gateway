@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Action {
 	
+	private String path;
+	
 	private Map<String, List<String>> headers;
 	
 	private Map<String, String> queryParams;

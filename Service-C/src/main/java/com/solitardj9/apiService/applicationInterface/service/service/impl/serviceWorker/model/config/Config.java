@@ -15,8 +15,6 @@ public class Config {
 	
 	private String host; 
 	
-	private String path;
-	
 	private String method;
 	
 	private List<RequestRule> requestRule;

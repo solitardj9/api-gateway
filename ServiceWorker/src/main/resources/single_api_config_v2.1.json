@@ -1,0 +1,81 @@
+{
+	"name" : "API-WEATHER-FORECAST_DAILY",
+	"type" : "single",
+	"config" : {
+		"scheme" : "http",
+		"host" : "127.0.0.1:19370" ,
+		"method" : "PUT",
+		"requestRule" : [
+			{
+				"condition" : ["TRIGGER(headers, key_INPUT_1, [Aaa])", "TRIGGER(queryParams, key_INPUT_1, deviceId test)", "TRIGGER(requestBody, $.id, bk.cha)"],
+				"action" : {
+					"path" : "service-a/test/getList",
+					"headers" : {
+						"key_FD_1" : ["FUNCTION( , headers, key_INPUT_1)"],
+      					"key_FD_2" : ["FUNCTION( , headers, key_INPUT_2)"],
+      					"key_FD_3" : ["3", "4"]
+    				},
+    				"queryParams" : {
+      					"key_FD_1" : "FUNCTION( , queryParams, key_INPUT_1)",
+      					"key_FD_2" : "FUNCTION( , queryParams, key_INPUT_2)",
+      					"key_FD_3" : 2
+    				},
+					"requestBody" : {
+	  					"id" : "FUNCTION( , requestBody, $.id)",
+      					"age" : "FUNCTION( , requestBody, $.age)"
+					}
+				}
+			},
+			{
+				"condition" : ["TRIGGER(headers, key_INPUT_2, [Bbb])", "TRIGGER(queryParams, key_INPUT_1, deviceId test2)"],
+				"action" : {
+					"path" : "service-a/test/getList",
+					"headers" : {
+						"key_FD_1" : ["FUNCTION( , headers, key_INPUT_1)"],
+      					"key_FD_2" : ["FUNCTION( , headers, key_INPUT_2)"]
+    				},
+    				"queryParams" : {
+      					"key_FD_1" : "FUNCTION( , queryParams, key_INPUT_1)",
+      					"key_FD_2" : "FUNCTION( , queryParams, key_INPUT_2)"
+    				},
+    				"requestBody" : {
+	  					"id" : "FUNCTION( , requestBody, $.id)",
+      					"age" : "FUNCTION( , requestBody, $.age)"
+					}
+				}
+			},
+			{
+				"condition" : ["TRIGGER(headers, key_INPUT_2, [Ccc])", "TRIGGER(queryParams, key_INPUT_1, deviceId test3)"],
+				"action" : {
+					"path" : "service-a/test/getList",
+					"headers" : {
+    				},
+    				"queryParams" : {
+    				},
+    				"requestBody" : {
+					}
+				}
+			}
+		],
+		"responseRule" : [
+			{
+				"condition" : ["TRIGGER(responseStatus, code, 404)"],
+				"responseBody" : {
+					"code" : 404,
+					"message" : "error_message_404"
+				}
+			},
+			{
+				"condition" : ["TRIGGER(responseStatus, code, 200)", "TRIGGER(responseBody, $.message, success)"],
+				"responseBody" : {
+					"code" : "FUNCTION( , responseBody, $.code)",
+					"message" : "FUNCTION( , responseBody, $.message)",
+					"ret" : {
+						"retKey1" : "FUNCTION( , responseBody, $.ret.retKey1)",
+						"retKey2" : "FUNCTION( , responseBody, $.ret.retKey2)"
+					}
+				}
+			}
+		]
+	}
+}

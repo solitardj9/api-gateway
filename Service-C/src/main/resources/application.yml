@@ -20,4 +20,45 @@ eureka:
       defaultZone: ${EUREKA_URL:http://127.0.0.1:19270/eureka/}
       
 serviceWorker:
-  config: '{}'
+  config: '{
+             "name" : "API-ACCU-WEATHER-V1-FORECAST_DAILY",
+             "type" : "single",
+             "config" : {
+               "scheme" : "https",
+               "host" : "api.accuweather.com",
+               "method" : "GET",
+               "requestRule" : [
+                 {
+                   "condition" : [],
+                   "action" : {
+                     "path" : "forecasts/v1/daily/FUNCTION( , headers, x-api-weather-forecast-days)day/FUNCTION( , headers, x-api-weather-location-key)",
+                     "headers" : null,
+                     "queryParams" : {
+                       "apiKey" : "",
+                       "languag" : "FUNCTION( , headers, x-api-languag)",
+                       "details" : true,
+                       "metric" : true
+                     },
+                     "requestBody" : null
+                   }
+                 }
+               ],
+               "responseRule" : [
+                 {
+                   "condition" : ["TRIGGER(responseStatus, code, 404)"],
+                   "responseBody" : {
+                     "code" : 404,
+                     "message" : "error_message_404"
+                   }
+                 },
+                 {
+                   "condition" : ["TRIGGER(responseStatus, code, 200)"],
+                   "responseBody" : {
+                     "code" : "FUNCTION( , responseStatus, code)",
+                     "message" : "sucess",
+                     "ret" : "FUNCTION( , responseBody, $)"
+                   }
+                 }
+               ]
+             }
+           }'

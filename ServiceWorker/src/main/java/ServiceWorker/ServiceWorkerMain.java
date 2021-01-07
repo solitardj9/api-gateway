@@ -34,59 +34,25 @@ public class ServiceWorkerMain {
 		}
 		
 		String config_single = "{\r\n" + 
-				"	\"name\" : \"API-WEATHER-FORECAST_DAILY\",\r\n" + 
+				"	\"name\" : \"API-ACCU-WEATHER-V1-FORECAST_DAILY\",\r\n" + 
 				"	\"type\" : \"single\",\r\n" + 
 				"	\"config\" : {\r\n" + 
-				"		\"scheme\" : \"http\",\r\n" + 
-				"		\"host\" : \"127.0.0.1:19370\" ,\r\n" + 
-				"		\"path\" : \"service-a/test/getList\",\r\n" + 
-				"		\"method\" : \"PUT\",\r\n" + 
+				"		\"scheme\" : \"https\",\r\n" + 
+				"		\"host\" : \"api.accuweather.com\",\r\n" + 
+				"		\"method\" : \"GET\",\r\n" + 
 				"		\"requestRule\" : [\r\n" + 
 				"			{\r\n" + 
-				"				\"condition\" : [\"TRIGGER(headers, key_INPUT_1, [Aaa])\", \"TRIGGER(queryParams, key_INPUT_1, deviceId test)\", \"TRIGGER(requestBody, $.id, bk.cha)\"],\r\n" + 
+				"				\"condition\" : [],\r\n" + 
 				"				\"action\" : {\r\n" + 
-				"					\"headers\" : {\r\n" + 
-				"						\"key_FD_1\" : [\"FUNCTION( , headers, key_INPUT_1)\"],\r\n" + 
-				"      					\"key_FD_2\" : [\"FUNCTION( , headers, key_INPUT_2)\"],\r\n" + 
-				"      					\"key_FD_3\" : [\"3\", \"4\"]\r\n" + 
-				"    				},\r\n" + 
+				"					\"path\" : \"forecasts/v1/daily/FUNCTION( , headers, x-api-weather-forecast-days)day/FUNCTION( , headers, x-api-weather-location-key)\",\r\n" + 
+				"					\"headers\" : null,\r\n" + 
 				"    				\"queryParams\" : {\r\n" + 
-				"      					\"key_FD_1\" : \"FUNCTION( , queryParams, key_INPUT_1)\",\r\n" + 
-				"      					\"key_FD_2\" : \"FUNCTION( , queryParams, key_INPUT_2)\",\r\n" + 
-				"      					\"key_FD_3\" : 2\r\n" + 
+				"      					\"apiKey\" : \"\",\r\n" + 
+				"      					\"languag\" : \"FUNCTION( , headers, x-api-languag)\",\r\n" + 
+				"      					\"details\" : true,\r\n" + 
+				"      					\"metric\" : true\r\n" + 
 				"    				},\r\n" + 
-				"					\"requestBody\" : {\r\n" + 
-				"	  					\"id\" : \"FUNCTION( , requestBody, $.id)\",\r\n" + 
-				"      					\"age\" : \"FUNCTION( , requestBody, $.age)\"\r\n" + 
-				"					}\r\n" + 
-				"				}\r\n" + 
-				"			},\r\n" + 
-				"			{\r\n" + 
-				"				\"condition\" : [\"TRIGGER(headers, key_INPUT_2, [Bbb])\", \"TRIGGER(queryParams, key_INPUT_1, deviceId test2)\"],\r\n" + 
-				"				\"action\" : {\r\n" + 
-				"					\"headers\" : {\r\n" + 
-				"						\"key_FD_1\" : [\"FUNCTION( , headers, key_INPUT_1)\"],\r\n" + 
-				"      					\"key_FD_2\" : [\"FUNCTION( , headers, key_INPUT_2)\"]\r\n" + 
-				"    				},\r\n" + 
-				"    				\"queryParams\" : {\r\n" + 
-				"      					\"key_FD_1\" : \"FUNCTION( , queryParams, key_INPUT_1)\",\r\n" + 
-				"      					\"key_FD_2\" : \"FUNCTION( , queryParams, key_INPUT_2)\"\r\n" + 
-				"    				},\r\n" + 
-				"    				\"requestBody\" : {\r\n" + 
-				"	  					\"id\" : \"FUNCTION( , requestBody, $.id)\",\r\n" + 
-				"      					\"age\" : \"FUNCTION( , requestBody, $.age)\"\r\n" + 
-				"					}\r\n" + 
-				"				}\r\n" + 
-				"			},\r\n" + 
-				"			{\r\n" + 
-				"				\"condition\" : [\"TRIGGER(headers, key_INPUT_2, [Ccc])\", \"TRIGGER(queryParams, key_INPUT_1, deviceId test3)\"],\r\n" + 
-				"				\"action\" : {\r\n" + 
-				"					\"headers\" : {\r\n" + 
-				"    				},\r\n" + 
-				"    				\"queryParams\" : {\r\n" + 
-				"    				},\r\n" + 
-				"    				\"requestBody\" : {\r\n" + 
-				"					}\r\n" + 
+				"					\"requestBody\" : null\r\n" + 
 				"				}\r\n" + 
 				"			}\r\n" + 
 				"		],\r\n" + 
@@ -99,14 +65,11 @@ public class ServiceWorkerMain {
 				"				}\r\n" + 
 				"			},\r\n" + 
 				"			{\r\n" + 
-				"				\"condition\" : [\"TRIGGER(responseStatus, code, 200)\", \"TRIGGER(responseBody, $.message, success)\"],\r\n" + 
+				"				\"condition\" : [\"TRIGGER(responseStatus, code, 200)\"],\r\n" + 
 				"				\"responseBody\" : {\r\n" + 
-				"					\"code\" : \"FUNCTION( , responseBody, $.code)\",\r\n" + 
-				"					\"message\" : \"FUNCTION( , responseBody, $.message)\",\r\n" + 
-				"					\"ret\" : {\r\n" + 
-				"						\"retKey1\" : \"FUNCTION( , responseBody, $.ret.retKey1)\",\r\n" + 
-				"						\"retKey2\" : \"FUNCTION( , responseBody, $.ret.retKey2)\"\r\n" + 
-				"					}\r\n" + 
+				"					\"code\" : \"FUNCTION( , responseStatus, code)\",\r\n" + 
+				"					\"message\" : \"\",\r\n" + 
+				"					\"ret\" : \"FUNCTION( , responseBody, $)\"\r\n" + 
 				"				}\r\n" + 
 				"			}\r\n" + 
 				"		]\r\n" + 
@@ -132,27 +95,31 @@ public class ServiceWorkerMain {
 			
 			//System.out.println(serviceWorkerConfigManager.getAllConfigs());
 			
-			ServiceWorkerSingle serviceWorkerSingle = new ServiceWorkerSingle(serviceWorkerConfigManager.getConfigAsString("API-WEATHER-FORECAST_DAILY"));
+			ServiceWorkerSingle serviceWorkerSingle = new ServiceWorkerSingle(serviceWorkerConfigManager.getConfigAsString("API-ACCU-WEATHER-V1-FORECAST_DAILY"));
 			
 			HttpHeaders inputHttpHeaders = new HttpHeaders();
-			inputHttpHeaders.add("key_INPUT_1", "Aaa");
-			inputHttpHeaders.add("key_INPUT_2", "Bbb");
+			//inputHttpHeaders.add("key_INPUT_1", "Aaa");
+			//inputHttpHeaders.add("key_INPUT_2", "Bbb");
+			inputHttpHeaders.add("x-api-languag", "kr-ko");
+			inputHttpHeaders.add("x-api-weather-forecast-days", "1");
+			inputHttpHeaders.add("x-api-weather-location-key", "226081");
 			serviceWorkerSingle.setInputHttpHeaders(inputHttpHeaders);
 			
 			Map<String, Object> inputQueryParams = new HashMap<>();
 			//inputQueryParams.put("key_INPUT_1", "deviceId test");
 			//inputQueryParams.put("key_INPUT_1", "deviceId test2");
-			inputQueryParams.put("key_INPUT_1", "deviceId test3");
 			//inputQueryParams.put("key_INPUT_1", "deviceId test3");
-			inputQueryParams.put("key_INPUT_2", 35.5);
+			//inputQueryParams.put("key_INPUT_1", "deviceId test3");
+			//inputQueryParams.put("key_INPUT_2", 35.5);
 			serviceWorkerSingle.setInputQueryParams(inputQueryParams);
 			
-			MyListRequest myListRequest = new MyListRequest("bk.cha", 21);
-			try {
-				serviceWorkerSingle.setInputRequestBody(om.writeValueAsString(myListRequest));
-			} catch (JsonProcessingException e) {
-				e.printStackTrace();
-			}
+			//MyListRequest myListRequest = new MyListRequest("bk.cha", 21);
+			//try {
+			//	serviceWorkerSingle.setInputRequestBody(om.writeValueAsString(myListRequest));
+			//} catch (JsonProcessingException e) {
+			//	e.printStackTrace();
+			//}
+			serviceWorkerSingle.setInputRequestBody(null);
 			
 			System.out.println("//---------------------------------------------");
 			System.out.println("InputHttpHeaders = " + serviceWorkerSingle.getInputHttpHeaders());
@@ -169,6 +136,7 @@ public class ServiceWorkerMain {
 			System.out.println("diffTimeInMilli = " + diffTimeInMilli);
 			
 			System.out.println("//---------------------------------------------");
+			System.out.println("OutputPath = " + serviceWorkerSingle.getOutgoingPath());
 			System.out.println("OutputHttpHeaders = " + serviceWorkerSingle.getOutgoingHttpHeaders());
 			System.out.println("OutputQueryParams = " + serviceWorkerSingle.getOutgoingQueryParams());
 			System.out.println("OutgoingRequestBody = " + serviceWorkerSingle.getOutgoingRequestBody());

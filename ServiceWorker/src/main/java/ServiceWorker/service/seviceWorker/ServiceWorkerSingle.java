@@ -39,6 +39,10 @@ public class ServiceWorkerSingle {
 	
 	private HttpProxyAdaptor httpProxyAdaptor;
 	
+	private String inputPath;
+	
+	private String outgoingPath;
+	
 	private HttpHeaders inputHttpHeaders;
 	
 	private HttpHeaders outgoingHttpHeaders;
@@ -348,13 +352,57 @@ public class ServiceWorkerSingle {
 		
 	private void executeAction(Action action) {
 		// 1)
-		makeOutgoingHeaders(action);
+		makeOutgoingPath(action);
 		
 		// 2)
-		makeOutgoingQueryParams(action);
+		makeOutgoingHeaders(action);
 		
 		// 3)
+		makeOutgoingQueryParams(action);
+		
+		// 4)
 		makeOutgoingRequestBody(action);
+	}
+	
+	private void makeOutgoingPath(Action action) {
+		// 
+		String path = action.getPath();
+		outgoingPath = makePathWithFunctions(path); 
+	}
+	
+	private String makePathWithFunctions(String path) {
+		//
+		String tmpPath = new String(path);
+		
+		String regExp = "FUNCTION\\((.*?)\\)";
+		Pattern p = Pattern.compile(regExp);
+		Matcher m = p.matcher(tmpPath);
+
+		Boolean isMatched = false;
+		while (m.find()) {
+			//
+			isMatched = true;
+			
+			String matchedExp = m.group();
+			
+			//System.out.println("matchedExp = " + matchedExp);
+			
+			FunctionExp functionExp = extractFunction(matchedExp);
+			
+			//System.out.println("functionExp = " + functionExp.toString());
+			
+			//System.out.println("tmpPath = " + tmpPath.toString());
+			
+			tmpPath = tmpPath.replace(matchedExp, String.valueOf(doFunction(functionExp)));
+			
+			//System.out.println("replaced tmpPath = " + tmpPath.toString());
+		}
+		
+		if (!isMatched) {
+			tmpPath = path;
+		}
+		
+		return tmpPath;
 	}
 	
 	private void makeOutgoingHeaders(Action action) {
@@ -363,7 +411,10 @@ public class ServiceWorkerSingle {
 			outgoingHttpHeaders = new HttpHeaders();
 			
 		Map<String, List<String>> headersConfig = action.getHeaders();
-		if (!headersConfig.isEmpty()) {
+		if (headersConfig == null) {
+			outgoingHttpHeaders = null;
+		}
+		else if ( (headersConfig != null) && (!headersConfig.isEmpty()) ) {
 			for (Entry<String, List<String>> iterHeaders : headersConfig.entrySet()) {
 				List<String> headerValues = iterHeaders.getValue();
 				for (String iterHeaderValue : headerValues) {
@@ -383,7 +434,10 @@ public class ServiceWorkerSingle {
 			outgoingQueryParams = new HashMap<>();
 		
 		Map<String, String> queryParamsConfig = action.getQueryParams();
-		if (!queryParamsConfig.isEmpty()) {
+		if (queryParamsConfig == null) {
+			outgoingQueryParams = null;
+		}
+		else if ( (queryParamsConfig != null) && (!queryParamsConfig.isEmpty()) ) {
 			for (Entry<String, String> iterQueryParams : queryParamsConfig.entrySet()) {
 				outgoingQueryParams.put(iterQueryParams.getKey(), executeFunction(iterQueryParams.getValue()));
 			}
@@ -396,27 +450,33 @@ public class ServiceWorkerSingle {
 	private void makeOutgoingRequestBody(Action action) {
 		//
 		Object requestBodyConfig = action.getRequestBody();
-		List<JsonKeyPathObject> jsonPathKeyObjects = new ArrayList<>();
-		JsonUtil.extractJsonKeyPathObjectFormJsonObject(requestBodyConfig, jsonPathKeyObjects);
 		
-		//System.out.println("[ServiceWorkerSingle].makeOutgoingRequestBody : b/f jsonPathKeyObjects = " + jsonPathKeyObjects.toString());
-		
-		if (!jsonPathKeyObjects.isEmpty()) {
-			for (JsonKeyPathObject iter : jsonPathKeyObjects) {
-				if (iter.getObject() instanceof String) {
-					String exp = (String)iter.getObject();
-					if (exp.contains("FUNCTION")) {
-						iter.setObject(executeFunction(exp));
-					}
-				}
-			}
-		
-			//System.out.println("[ServiceWorkerSingle].makeOutgoingRequestBody : a/f jsonPathKeyObjects = " + jsonPathKeyObjects.toString());
-
-			outgoingRequestBody = JsonUtil.mergeJsonString(jsonPathKeyObjects);
+		if (requestBodyConfig == null) {
+			outgoingRequestBody = null;
 		}
 		else {
-			outgoingRequestBody = inputRequestBody;
+			List<JsonKeyPathObject> jsonPathKeyObjects = new ArrayList<>();
+			JsonUtil.extractJsonKeyPathObjectFormJsonObject(requestBodyConfig, jsonPathKeyObjects);
+			
+			//System.out.println("[ServiceWorkerSingle].makeOutgoingRequestBody : b/f jsonPathKeyObjects = " + jsonPathKeyObjects.toString());
+			
+			if (!jsonPathKeyObjects.isEmpty()) {
+				for (JsonKeyPathObject iter : jsonPathKeyObjects) {
+					if (iter.getObject() instanceof String) {
+						String exp = (String)iter.getObject();
+						if (exp.contains("FUNCTION")) {
+							iter.setObject(executeFunction(exp));
+						}
+					}
+				}
+			
+				//System.out.println("[ServiceWorkerSingle].makeOutgoingRequestBody : a/f jsonPathKeyObjects = " + jsonPathKeyObjects.toString());
+	
+				outgoingRequestBody = JsonUtil.mergeJsonString(jsonPathKeyObjects);
+			}
+			else {
+				outgoingRequestBody = inputRequestBody;
+			}
 		}
 		
 		//System.out.println("[ServiceWorkerSingle].makeOutgoingRequestBody : outgoingRequetBody = " + outgoingRequestBody);
@@ -426,12 +486,11 @@ public class ServiceWorkerSingle {
 		//
 		String scheme = config.getConfig().getScheme();
 		String url = config.getConfig().getHost();
-		String path = config.getConfig().getPath();
 		HttpMethod httpMethod = HttpMethod.valueOf(config.getConfig().getMethod());
 		
 		ResponseEntity<String> result = httpProxyAdaptor.executeHttpProxy(scheme, 
 																		  url, 
-																		  path, 
+																		  outgoingPath, 
 																		  outgoingQueryParams, 
 																		  httpMethod, 
 																		  outgoingHttpHeaders, 
@@ -512,6 +571,9 @@ public class ServiceWorkerSingle {
 			else if (functionExp.getResource().equals("responseBody")) {
 				return getValueOfResponseBody(functionExp.getKey());
 			}
+			else if (functionExp.getResource().equals("responseStatus")) {
+				return getValueOfResponseStatus(functionExp.getKey());	
+			}
 			else {
 				return null;
 			}
@@ -528,6 +590,9 @@ public class ServiceWorkerSingle {
 			}
 			else if (functionExp.getResource().equals("responseBody")) {
 				return getValueOfResponseBodyFromOhterApi(functionExp.getApi(), functionExp.getKey());
+			}
+			else if (functionExp.getResource().equals("responseStatus")) {
+				return getValueOfResponseStatusFromOhterApi(functionExp.getApi(), functionExp.getKey());
 			}
 			else {
 				return null;
@@ -603,6 +668,21 @@ public class ServiceWorkerSingle {
 		//
 		return serviceWorkerComposite.getValueOfResponseBodyFromOhterApi(api, keyPath);
 	}
+	
+	// Response Status ----------------------
+	private Object getValueOfResponseStatus(String key) {
+		//
+		if (key.equals("code")) {
+			return Integer.valueOf(inputResponseEntity.getStatusCodeValue());
+		}
+		else
+			return null;
+	}
+	
+	private Object getValueOfResponseStatusFromOhterApi(String api, String keyPath) {
+		//
+		return serviceWorkerComposite.getValueOfResponseStatusFromOhterApi(api, keyPath);
+	}
 	//-------------------------------------------------------------------------------------------------------------------
 
 	// Outer Interface --------------------------------------------------------------------------------------------------
@@ -624,6 +704,11 @@ public class ServiceWorkerSingle {
 	public Object getValueOfResponseBodyByComposite(String keyPath) {
 		//
 		return getValueOfResponseBody(keyPath);
+	}
+	
+	public Object getValueOfResponseStatusByComposite(String key) {
+		//
+		return getValueOfResponseStatus(key);
 	}
 	//-------------------------------------------------------------------------------------------------------------------
 }
