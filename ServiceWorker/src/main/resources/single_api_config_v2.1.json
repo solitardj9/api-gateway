@@ -9,11 +9,12 @@
 			{
 				"condition" : ["TRIGGER(headers, key_INPUT_1, [Aaa])", "TRIGGER(queryParams, key_INPUT_1, deviceId test)", "TRIGGER(requestBody, $.id, bk.cha)"],
 				"action" : {
-					"path" : "service-a/test/getList",
+					"path" : "service/service-a/b2b/test/api/getList",
 					"headers" : {
 						"key_FD_1" : ["FUNCTION( , headers, key_INPUT_1)"],
       					"key_FD_2" : ["FUNCTION( , headers, key_INPUT_2)"],
-      					"key_FD_3" : ["3", "4"]
+      					"key_FD_3" : ["3", "4"],
+      					"x-location-info" : ["FUNCTION( , headers, x-location-info)"]
     				},
     				"queryParams" : {
       					"key_FD_1" : "FUNCTION( , queryParams, key_INPUT_1)",

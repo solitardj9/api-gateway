@@ -367,10 +367,10 @@ public class ServiceWorkerSingle {
 	private void makeOutgoingPath(Action action) {
 		// 
 		String path = action.getPath();
-		outgoingPath = makePathWithFunctions(path); 
+		outgoingPath = executeFunctionToMergeString(path); 
 	}
 	
-	private String makePathWithFunctions(String path) {
+	private String executeFunctionToMergeString(String path) {
 		//
 		String tmpPath = new String(path);
 		
@@ -418,7 +418,7 @@ public class ServiceWorkerSingle {
 			for (Entry<String, List<String>> iterHeaders : headersConfig.entrySet()) {
 				List<String> headerValues = iterHeaders.getValue();
 				for (String iterHeaderValue : headerValues) {
-					outgoingHttpHeaders.add(iterHeaders.getKey(), (String)executeFunction(iterHeaderValue));
+					outgoingHttpHeaders.add(iterHeaders.getKey(), (String)executeFunctionToGetObject(iterHeaderValue));
 				}
 			}
 		}
@@ -439,7 +439,7 @@ public class ServiceWorkerSingle {
 		}
 		else if ( (queryParamsConfig != null) && (!queryParamsConfig.isEmpty()) ) {
 			for (Entry<String, String> iterQueryParams : queryParamsConfig.entrySet()) {
-				outgoingQueryParams.put(iterQueryParams.getKey(), executeFunction(iterQueryParams.getValue()));
+				outgoingQueryParams.put(iterQueryParams.getKey(), executeFunctionToGetObject(iterQueryParams.getValue()));
 			}
 		}
 		else {	// byPass
@@ -465,7 +465,7 @@ public class ServiceWorkerSingle {
 					if (iter.getObject() instanceof String) {
 						String exp = (String)iter.getObject();
 						if (exp.contains("FUNCTION")) {
-							iter.setObject(executeFunction(exp));
+							iter.setObject(executeFunctionToGetObject(exp));
 						}
 					}
 				}
@@ -504,7 +504,7 @@ public class ServiceWorkerSingle {
 		return result;
 	}
 	
-	private Object executeFunction(String str) {
+	private Object executeFunctionToGetObject(String str) {
 		//
 		Object ret = null;
 		String tmpStr = new String(str);
@@ -520,13 +520,13 @@ public class ServiceWorkerSingle {
 			
 			String matchedExp = m.group();
 			
-			//System.out.println("matchedExp = " + matchedExp);
+			System.out.println("matchedExp = " + matchedExp);
 			
 			FunctionExp functionExp = extractFunction(matchedExp);
 			
-			//System.out.println("functionExp = " + functionExp.toString());
+			System.out.println("functionExp = " + functionExp.toString());
 			
-			ret = doFunction(functionExp);
+			//ret = doFunction(functionExp);
 		}
 		
 		if (!isMatched) {
@@ -611,7 +611,7 @@ public class ServiceWorkerSingle {
 			if (iter.getObject() instanceof String) {
 				String exp = (String)iter.getObject();
 				if (exp.contains("FUNCTION")) {
-					iter.setObject(executeFunction(exp));
+					iter.setObject(executeFunctionToGetObject(exp));
 				}
 			}
 		}
@@ -672,7 +672,7 @@ public class ServiceWorkerSingle {
 	// Response Status ----------------------
 	private Object getValueOfResponseStatus(String key) {
 		//
-		if (key.equals("code")) {
+		if (key.equals("CODE")) {
 			return Integer.valueOf(inputResponseEntity.getStatusCodeValue());
 		}
 		else

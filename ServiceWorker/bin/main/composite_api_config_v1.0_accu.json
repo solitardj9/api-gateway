@@ -1,0 +1,8 @@
+{
+  "name" : "API-ACCU-WEATHER-V1-FORECAST_DAILY_COMPOSITE",
+  "type" : "composite",
+  "sequence" : [
+    "API-ACCU-WEATHER-V1-LOCATION",
+    "API-ACCU-WEATHER-V1-FORECAST_DAILY"
+  ]
+}

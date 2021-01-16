@@ -1,12 +1,16 @@
 package com.solitardj9.apiService.serviceInterface.test.controller;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,9 +50,19 @@ public class TestController {
 	
 	@SuppressWarnings("rawtypes")
 	@PutMapping(value="/getList")
-	public ResponseEntity onGetList(@RequestBody(required=true) String requestBody) {
+	public ResponseEntity onGetList(@RequestHeader HttpHeaders header, 
+			@RequestBody(required=true) String requestBody) {
 		//
 		logger.info("[TestController].onGetList is called.");
+		
+		logger.info("Header = " + header.toString());
+		String locationInfo = header.getFirst("x-location-info");
+		try {
+			Map<String, Object> locationInfoMap = om.readValue(locationInfo, Map.class);
+			System.out.println("locationInfoMap = " + locationInfoMap.toString());
+		} catch (JsonProcessingException e1) {
+			e1.printStackTrace();
+		}
 		
 		MyListRequest myListRequest = null;
 		try {

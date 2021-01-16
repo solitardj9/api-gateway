@@ -1,0 +1,41 @@
+{
+	"name" : "API-ACCU-WEATHER-V1-LOCATION",
+	"type" : "single",
+	"config" : {
+		"scheme" : "https",
+		"host" : "api.accuweather.com" ,
+		"method" : "GET",
+		"requestRule" : [
+			{
+				"condition" : [],
+				"action" : {
+					"path" : "locations/v1/cities/translate.json",
+					"headers" : null,
+    				"queryParams" : {
+      					"apiKey" : "",
+      					"language" : "FUNCTION_STRINGFORMAT({1}-{2}, FUNCTION_GET( , headers, x-api-country, 0), FUNCTION_GET( , headers, x-api-language, 0))",
+      					"q" : "FUNCTION_GET( , headers, x-api-city, 0)"
+    				},
+					"requestBody" : null
+				}
+			}
+		],
+		"responseRule" : [
+			{
+				"condition" : ["FUNCTION_TRIGGER(responseStatus, code, 404)"],
+				"responseBody" : {
+					"code" : 404,
+					"message" : "error_message_404"
+				}
+			},
+			{
+				"condition" : ["FUNCTION_TRIGGER(responseStatus, code, 200)"],
+				"responseBody" : {
+					"code" : "FUNCTION_GET( , responseStatus, code)",
+					"message" : "sucess",
+					"ret" : "FUNCTION_GET( , responseBody, $)"
+				}
+			}
+		]
+	}
+}
